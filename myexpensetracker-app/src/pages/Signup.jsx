@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link , useNavigate} from "react-router-dom";
 import {
   createUserWithEmailAndPassword,
   signInWithPopup,
@@ -11,6 +11,7 @@ import AuthLayout from "../components/AuthLayout";
 import "../assets/styles/auth.css";
 
 export default function Signup() {
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -33,6 +34,7 @@ export default function Signup() {
   try {
     await createUserWithEmailAndPassword(auth, email, newPassword);
     alert("Account created successfully!");
+    navigate("/dashboard");
   } catch (error) {
     if (error.code === "auth/email-already-in-use") {
       alert("An account with this email already exists. Please sign in.");
@@ -50,6 +52,7 @@ export default function Signup() {
     try {
       await signInWithPopup(auth, googleProvider);
       alert("Signed up with Google!");
+      navigate("/dashboard");
     } catch (error) {
       alert(error.message);
     }

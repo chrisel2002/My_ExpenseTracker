@@ -1,10 +1,12 @@
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "../firebase";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AuthLayout from "../components/AuthLayout";
+import bg from "../assets/images/Loginpage_background.jpeg";
 
 export default function Login() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPw, setShowPw] = useState(false);
@@ -12,6 +14,7 @@ export default function Login() {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       alert("Login successful!");
+      navigate("/dashboard");
     } catch (error) {
       alert(error.message);
     }
@@ -21,43 +24,21 @@ export default function Login() {
     try {
       await signInWithPopup(auth, googleProvider);
       alert("Google login successful!");
+      navigate("/dashboard");
     } catch (error) {
       alert(error.message);
     }
   };
 
   return (
-    // <div className="auth-container">
-    //   <h2>Welcome Back</h2>
-
-    //   <input
-    //     type="email"
-    //     placeholder="Email Address"
-    //     onChange={(e) => setEmail(e.target.value)}
-    //   />
-
-    //   <input
-    //     type="password"
-    //     placeholder="Password"
-    //     onChange={(e) => setPassword(e.target.value)}
-    //   />
-
-    //   <button onClick={handleLogin}>Sign In</button>
-
-    //   <p>OR</p>
-
-    //   <button className="google-btn" onClick={handleGoogleLogin}>
-    //     Sign in with Google
-    //   </button>
-    // </div>
-    <AuthLayout imageUrl={"myexpensetracker-app\src\assets\images\Loginpage_background.jpeg"}>
+    <AuthLayout imageUrl={bg}>
       <div className="auth-icon">
         <LockIcon />
       </div>
 
       <h1 className="auth-title">Welcome Back</h1>
       <p className="auth-subtitle">Sign in to your account</p>
-<form className="auth-form" onSubmit={(e) => e.preventDefault()}>
+      <form className="auth-form" onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
         <label className="auth-label">Email Address</label>
         <div className="auth-inputWrap">
           <span className="auth-leadingIcon">
@@ -68,6 +49,8 @@ export default function Login() {
             type="email"
             placeholder="you@example.com"
             autoComplete="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
 
@@ -81,6 +64,8 @@ export default function Login() {
             type={showPw ? "text" : "password"}
             placeholder="Enter your password"
             autoComplete="current-password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
           <button
             type="button"

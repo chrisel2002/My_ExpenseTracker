@@ -12,8 +12,10 @@
 }
 
 .auth-right {
-  display: grid;
-  place-items: center;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-left: 90px;
   padding: 48px 24px;
 }
 
@@ -81,7 +83,7 @@
 }
 
 .auth-input {
-  width: 100%;
+  width: 80%;
   height: 38px;
   padding: 0 38px 0 34px;
   border: 1px solid rgba(0, 0, 0, 0.12);

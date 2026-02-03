@@ -1,72 +1,63 @@
-import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
-import { auth, googleProvider } from "../firebase";
-// import { useState } from "react";
-
-// export default function Signup() {
-//   const [email, setEmail] = useState("");
-//   const [password, setPassword] = useState("");
-
-//   const handleSignup = async () => {
-//     try {
-//       await createUserWithEmailAndPassword(auth, email, password);
-//       alert("Account created!");
-//     } catch (error) {
-//       alert(error.message);
-//     }
-//   };
-
-//   const handleGoogleSignup = async () => {
-//     try {
-//       await signInWithPopup(auth, googleProvider);
-//       alert("Signed up with Google!");
-//     } catch (error) {
-//       alert(error.message);
-//     }
-//   };
-
-//   return (
-//     <div className="auth-container">
-//       <h2>Create Account</h2>
-
-//       <input
-//         type="email"
-//         placeholder="Email Address"
-//         onChange={(e) => setEmail(e.target.value)}
-//       />
-
-//       <input
-//         type="password"
-//         placeholder="Password"
-//         onChange={(e) => setPassword(e.target.value)}
-//       />
-
-//       <button onClick={handleSignup}>Sign Up</button>
-
-//       <p>OR</p>
-
-//       <button className="google-btn" onClick={handleGoogleSignup}>
-//         Sign up with Google
-//       </button>
-//     </div>
-//   );
-// }
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import {
+  createUserWithEmailAndPassword,
+  signInWithPopup,
+  updateProfile,
+} from "firebase/auth";
+import { auth, googleProvider } from "../firebase";
+import signupbg from "../assets/images/signupbg.jpeg";
 import AuthLayout from "../components/AuthLayout";
 import "../assets/styles/auth.css";
 
 export default function Signup() {
-  const handleGoogleLogin = async () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const [showNew, setShowNew] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
+
+    if (!name.trim()) return alert("Please enter your name.");
+    if (!email.trim()) return alert("Please enter your email.");
+    if (newPassword.length < 6) return alert("Password must be at least 6 characters.");
+   if (newPassword !== confirmPassword) {
+    alert("Passwords do not match");
+    return;
+  }
+
+  try {
+    await createUserWithEmailAndPassword(auth, email, newPassword);
+    alert("Account created successfully!");
+  } catch (error) {
+    if (error.code === "auth/email-already-in-use") {
+      alert("An account with this email already exists. Please sign in.");
+    } else if (error.code === "auth/invalid-email") {
+      alert("Please enter a valid email address.");
+    } else if (error.code === "auth/weak-password") {
+      alert("Password should be at least 6 characters.");
+    } else {
+      alert(error.message);
+    }
+  }
+};
+
+  const handleGoogleSignup = async () => {
     try {
       await signInWithPopup(auth, googleProvider);
-      alert("Google login successful!");
+      alert("Signed up with Google!");
     } catch (error) {
       alert(error.message);
     }
   };
+
   return (
-    <AuthLayout imageUrl="/login-left.jpg">
+    <AuthLayout imageUrl={signupbg}>
       <div className="auth-icon">
-        {/* reuse the same lock icon look */}
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
           <path
             d="M7.5 10V8.5a4.5 4.5 0 0 1 9 0V10"
@@ -82,10 +73,39 @@ export default function Signup() {
         </svg>
       </div>
 
-      <h1 className="auth-title">Create Account</h1>
-      <p className="auth-subtitle">Sign up to get started</p>
+      <h1 className="auth-title">Sign Up</h1>
+      <p className="auth-subtitle">Create your account to get started</p>
 
-      <form className="auth-form" onSubmit={(e) => e.preventDefault()}>
+      <form className="auth-form" onSubmit={handleSignup}>
+        {/* Name */}
+        <label className="auth-label">Name</label>
+        <div className="auth-inputWrap">
+          <span className="auth-leadingIcon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M20 21a8 8 0 0 0-16 0"
+                stroke="currentColor"
+                strokeWidth="1.7"
+                strokeLinecap="round"
+              />
+              <path
+                d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z"
+                stroke="currentColor"
+                strokeWidth="1.7"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </span>
+          <input
+            className="auth-input"
+            type="text"
+            placeholder="Your name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
+
+        {/* Email */}
         <label className="auth-label">Email Address</label>
         <div className="auth-inputWrap">
           <span className="auth-leadingIcon">
@@ -104,10 +124,17 @@ export default function Signup() {
               />
             </svg>
           </span>
-          <input className="auth-input" type="email" placeholder="you@example.com" />
+          <input
+            className="auth-input"
+            type="email"
+            placeholder="you@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
         </div>
 
-        <label className="auth-label">Password</label>
+        {/* New Password */}
+        <label className="auth-label">New password</label>
         <div className="auth-inputWrap">
           <span className="auth-leadingIcon">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
@@ -120,11 +147,83 @@ export default function Signup() {
               />
             </svg>
           </span>
-          <input className="auth-input" type="password" placeholder="Create a password" />
+
+          <input
+            className="auth-input"
+            type={showNew ? "text" : "password"}
+            placeholder="Enter your password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+          />
+
+          <button
+            type="button"
+            className="auth-trailingBtn"
+            onClick={() => setShowNew((s) => !s)}
+            aria-label={showNew ? "Hide password" : "Show password"}
+          >
+            {/* eye icon */}
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"
+                stroke="currentColor"
+                strokeWidth="1.7"
+              />
+              <path
+                d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
+                stroke="currentColor"
+                strokeWidth="1.7"
+              />
+            </svg>
+          </button>
+        </div>
+
+        {/* Confirm Password */}
+        <label className="auth-label">Confirm Password</label>
+        <div className="auth-inputWrap">
+          <span className="auth-leadingIcon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M14.5 10.5a4 4 0 1 0-1.2 2.9L21 21v-3h-2v-2h-2v-2h-2.2l-1.7-1.7"
+                stroke="currentColor"
+                strokeWidth="1.7"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </span>
+
+          <input
+            className="auth-input"
+            type={showConfirm ? "text" : "password"}
+            placeholder="Repeat your password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+
+          <button
+            type="button"
+            className="auth-trailingBtn"
+            onClick={() => setShowConfirm((s) => !s)}
+            aria-label={showConfirm ? "Hide password" : "Show password"}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"
+                stroke="currentColor"
+                strokeWidth="1.7"
+              />
+              <path
+                d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
+                stroke="currentColor"
+                strokeWidth="1.7"
+              />
+            </svg>
+          </button>
         </div>
 
         <button className="auth-primaryBtn" type="submit">
-          Sign Up
+          Sign up
         </button>
 
         <div className="auth-divider">
@@ -133,10 +232,7 @@ export default function Signup() {
           <span />
         </div>
 
-        <button className="auth-googleBtn" 
-        type="button" 
-        onClick ={handleGoogleLogin}>
-          {/* small google icon */}
+        <button className="auth-googleBtn" type="button" onClick={handleGoogleSignup}>
           <span style={{ display: "inline-flex" }}>
             <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
               <path
@@ -161,7 +257,7 @@ export default function Signup() {
         </button>
 
         <p className="auth-bottomText">
-          Already have an account? <Link to="/">Sign in</Link>
+          Already have an account? <Link to="/">Sign In</Link>
         </p>
       </form>
     </AuthLayout>

@@ -14,6 +14,7 @@ import {
   deleteDoc,
   doc
 } from "firebase/firestore";
+import { Link } from "react-router-dom";
 
 function startOfMonth(d) {
   return new Date(d.getFullYear(), d.getMonth(), 1, 0, 0, 0);
@@ -250,12 +251,12 @@ export default function Dashboard() {
             <div className="welcomeUser">
             Welcome, <span className="welcomeName">{displayName}</span>
         </div>
-          <div className="tab tab-active">
+          <Link to="/dashboard" className="tab tab-active">
             <GridIcon /> Dashboard
-          </div>
-          <div className="tab">
+          </Link>
+          <Link to="/analytics" className="tab">
             <ChartIcon /> Analytics
-          </div>
+          </Link>
         </nav>
 
         <button className="logoutBtn" onClick={() => signOut(auth)}>

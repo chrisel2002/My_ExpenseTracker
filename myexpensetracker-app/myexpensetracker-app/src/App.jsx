@@ -4,6 +4,7 @@ import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./routes/ProtectedRote";
 import Analytics from "./pages/Analytics";
+
 export default function App() {
   return (
     <BrowserRouter>

@@ -1,8 +1,7 @@
-import "../assets/styles/dashboard.css";
+import "../assets/styles/Dashboard.css";
 import { useEffect, useMemo, useState } from "react";
 import { signOut } from "firebase/auth";
 import { auth, db } from "../firebase";
-import { Link } from "react-router-dom";  
 import {
   addDoc,
   collection,
@@ -15,6 +14,7 @@ import {
   deleteDoc,
   doc
 } from "firebase/firestore";
+import { Link } from "react-router-dom";
 
 function startOfMonth(d) {
   return new Date(d.getFullYear(), d.getMonth(), 1, 0, 0, 0);

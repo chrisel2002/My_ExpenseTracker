@@ -1,9 +1,8 @@
 import "../assets/styles/Analytics.css";
-import "../assets/styles/dashboard.css"; // reuse your nav + cards styles
+import "../assets/styles/Dashboard.css"; // reuse your nav + cards styles
 import { useEffect, useMemo, useState } from "react";
 import { signOut } from "firebase/auth";
 import { auth, db } from "../firebase";
-import { Link } from "react-router-dom";
 import {
   collection,
   onSnapshot,
@@ -12,6 +11,7 @@ import {
   Timestamp,
   where,
 } from "firebase/firestore";
+import { Link } from "react-router-dom";
 
 /* ---------- helpers ---------- */
 function money(n) {
@@ -263,7 +263,7 @@ export default function Analytics() {
         </div>
 
         <nav className="tabs">
-             <div className="welcomeUser">
+            <div className="welcomeUser">
           Welcome, <span className="welcomeName">{displayName}</span>
         </div>
           <Link to="/dashboard" className="tab">

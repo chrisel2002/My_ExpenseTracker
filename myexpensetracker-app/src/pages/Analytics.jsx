@@ -297,7 +297,6 @@ export default function Analytics() {
           </div>
         </div>
 
-        {/* top stats like screenshot */}
         <section className="statsGrid">
           <StatCard
             icon={<CalendarIcon />}

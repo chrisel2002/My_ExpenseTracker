@@ -22,7 +22,34 @@ Simply open the live website and start tracking:
 https://mystudexpenses.netlify.app/
 
 ---
+## Application Pages Overview
 
+### Login Page
+- Allows users to securely log in to the application
+- Supports **Google Authentication** for quick and seamless access
+- Ensures only authenticated users can access personal expense data
+
+### Signup Page
+- Enables new users to create an account easily
+- Supports **Sign up using Google**, eliminating the need to remember passwords
+- User credentials and authentication are securely managed using **Firebase Authentication**
+
+### Dashboard
+- Acts as the main landing page after login
+- Displays an overview of user expenses
+- Allows users to:
+  - Add new expenses
+  - View recently added expenses
+  - Manage expense entries in a simple, intuitive layout
+
+### Analytics Page
+- Provides a visual summary of spending patterns
+- Displays expense data grouped by:
+  - Category
+  - Date (daily / weekly / monthly)
+- Helps users understand their spending habits and make informed financial decisions
+
+---
 ## Technical Skills
 
 - **React.js**  
@@ -50,24 +77,6 @@ https://mystudexpenses.netlify.app/
 
 ---
 
-## Development & Engineering Skills
-
-- **Frontend Architecture**  
-  - Organizing React components and application structure clearly and efficiently
-
-- **State Management**  
-  - Managing user-entered expense data and application state
-
-- **User-Centered Design**  
-  - Designing a clean, simple, and intuitive interface tailored for students
-
-- **Debugging & Troubleshooting**  
-  - Identifying and resolving dependency, build, and runtime issues
-
-- **Version Control (Git & GitHub)**  
-  - Managing source code, tracking changes, and maintaining a public repository
-
----
 
 ## What This Project Highlights
 
